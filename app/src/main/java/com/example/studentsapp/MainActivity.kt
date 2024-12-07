@@ -1,6 +1,11 @@
 package com.example.studentsapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.util.Log.*
+import android.view.View
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,11 +22,24 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // TODO: Step 1 - Add Student Button
+        // TODO: Step 1 - Add Student Button ✅
         // TODO: Step 2 - Navigate to AddStudentActivity
         // TODO: Step 3 - Create AddStudentLayout
         // TODO: Step 4 - Save Student
 
+        class Listener : View.OnClickListener {
+            override fun onClick(v: View?) {
+            }
+
+        }
+
+        val addStudentButton: Button = findViewById(R.id.main_activity_add_student_button)
+        val listener = Listener()
+        addStudentButton.setOnClickListener({
+            Log.d("Action", "clicked on add_button")
+            val intent = Intent(this, AddStudentActivity::class.java)
+            startActivity(intent)
+        })
 
     }
 }
