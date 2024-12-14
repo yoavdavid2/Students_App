@@ -8,7 +8,7 @@
     tools:context=".AddStudentActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/student_row_image_view"
         android:layout_width="428dp"
         android:layout_height="278dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
         android:layout_marginTop="30dp"
         android:text="Name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/student_row_image_view" />
 
     <EditText
         android:id="@+id/add_student_activity_name_edit_text"
