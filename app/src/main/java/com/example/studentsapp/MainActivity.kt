@@ -23,23 +23,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         // TODO: Step 1 - Add Student Button ✅
-        // TODO: Step 2 - Navigate to AddStudentActivity
-        // TODO: Step 3 - Create AddStudentLayout
-        // TODO: Step 4 - Save Student
+        // TODO: Step 2 - Navigate to AddStudentActivity ✅
+        // TODO: Step 3 - Create AddStudentLayout ✅
+        // TODO: Step 4 - Save Student ✅
 
-        class Listener : View.OnClickListener {
-            override fun onClick(v: View?) {
-            }
-
-        }
+//        class Listener : View.OnClickListener {
+//            override fun onClick(v: View?) {
+//            }
+//        }
 
         val addStudentButton: Button = findViewById(R.id.main_activity_add_student_button)
-        val listener = Listener()
-        addStudentButton.setOnClickListener({
-            Log.d("Action", "clicked on add_button")
+
+//        // Option 1
+//        val listener = Listener()
+//        addStudentButton.setOnClickListener(listener)
+//
+//        // Option 2
+//        addStudentButton.setOnClickListener(object: View.OnClickListener {
+//            override fun onClick(v: View?) {
+//                Log.d("Activity", "onClick")
+//            }
+//        })
+
+        // Option 3
+
+        addStudentButton.setOnClickListener {
             val intent = Intent(this, AddStudentActivity::class.java)
             startActivity(intent)
-        })
-
+        }
     }
 }
