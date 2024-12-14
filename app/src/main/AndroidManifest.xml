@@ -13,6 +13,15 @@
         android:theme="@style/Theme.StudentsApp"
         tools:targetApi="31">
         <activity
+            android:name=".StudentsRecyclerViewActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".StudentsListViewActivity"
             android:exported="true">
             <intent-filter>
@@ -26,8 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>
