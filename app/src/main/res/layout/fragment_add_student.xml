@@ -5,7 +5,7 @@
     android:id="@+id/main_activity_button_one"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddStudentActivity">
+    tools:context=".AddStudentFragment">
 
     <ImageView
         android:id="@+id/student_row_image_view"

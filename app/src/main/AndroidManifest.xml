@@ -19,9 +19,6 @@
             android:name=".StudentsListViewActivity"
             android:exported="true" />
         <activity
-            android:name=".AddStudentActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

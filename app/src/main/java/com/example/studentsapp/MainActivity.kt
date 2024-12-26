@@ -1,13 +1,10 @@
 package com.example.studentsapp
 
 import android.os.Bundle
-import android.util.Log.*
-import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Lesson 5
-        // TODO: Step 1 - Setup project for nav graphs
+        // TODO: Step 1 - Setup project for nav graphs ✅
         // TODO: Step 2 - Setup nav_graph.xml and add Destinations
         // TODO: Step 3 - Setup MainActivity with nav host and nav controller
         // TODO: Step 4 -
