@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/studentsListFragment"
+        android:icon="@drawable/items"
+        android:title="List" />
+    <item
+        android:id="@+id/addStudentFragment"
+        android:icon="@drawable/add_24"
+        android:title="Add" />
+    <item
+        android:icon="@drawable/account_circle"
+        android:title="Profile" />
+</menu>
