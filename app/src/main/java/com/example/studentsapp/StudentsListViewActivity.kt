@@ -30,13 +30,13 @@ class StudentsListViewActivity : AppCompatActivity() {
         // TODO: Step 3 - Set layout in xml ✅
         // TODO: Step 4 - Implement adapter ✅
 
-        students = Model.shared.students
-        val listView: ListView = findViewById(R.id.students_list_view)
-        listView.adapter = StudentsAdapter(students)
-
-        listView.setOnItemClickListener { parent, view, position, id ->
-            Log.d("TAG", "A new row click on cell index $position")
-        }
+//        students = Model.shared.students
+//        val listView: ListView = findViewById(R.id.students_list_view)
+//        listView.adapter = StudentsAdapter(students)
+//
+//        listView.setOnItemClickListener { parent, view, position, id ->
+//            Log.d("TAG", "A new row click on cell index $position")
+//        }
     }
 }
 

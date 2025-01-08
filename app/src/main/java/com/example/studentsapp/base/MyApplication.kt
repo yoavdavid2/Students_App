@@ -1,10 +1,11 @@
 package com.example.studentsapp.base
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 
 class MyApplication: Application() {
-
+    @SuppressLint("StaticFieldLeak")
     object Globals {
         var context: Context? = null
     }

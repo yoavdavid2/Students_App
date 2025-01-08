@@ -34,24 +34,24 @@ class StudentsRecyclerViewActivity : AppCompatActivity() {
         // TODO: Step 2 - Add Adapter ✅
         // TODO: Step 3 - Add ViewHolder ✅
 
-        students = Model.shared.students
-
-        val recyclerView: RecyclerView = findViewById(R.id.students_recycler_view)
-        recyclerView.setHasFixedSize(true)
-
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-
-        val adapter = StudentsRecyclerAdapter(students)
-        adapter.listener = object: OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                Log.d("Event", "On click Activity listener position $position")
-            }
-
-            override fun onItemClick(student: Student?) {
-                Log.d("Event", "On student clicked, name: ${student?.name}")
-            }
-        }
-        recyclerView.adapter = adapter
+//        students = Model.shared.getAllStudents()
+//
+//        val recyclerView: RecyclerView = findViewById(R.id.students_recycler_view)
+//        recyclerView.setHasFixedSize(true)
+//
+//        val layoutManager = LinearLayoutManager(this)
+//        recyclerView.layoutManager = layoutManager
+//
+//        val adapter = StudentsRecyclerAdapter(students)
+//        adapter.listener = object: OnItemClickListener {
+//            override fun onItemClick(position: Int) {
+//                Log.d("Event", "On click Activity listener position $position")
+//            }
+//
+//            override fun onItemClick(student: Student?) {
+//                Log.d("Event", "On student clicked, name: ${student?.name}")
+//            }
+//        }
+//        recyclerView.adapter = adapter
     }
 }

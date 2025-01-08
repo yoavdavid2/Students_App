@@ -11,14 +11,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.navigation.Navigation
+import com.example.studentsapp.databinding.FragmentAddStudentBinding
+import com.example.studentsapp.model.Model
+import com.example.studentsapp.model.Student
 
 class AddStudentFragment : Fragment() {
 
-    var saveButton: Button? = null
-    var cancelButton: Button? = null
-    var nameEditText: EditText? = null
-    var idEditText: EditText? = null
-    var savedMessageTextView: TextView? = null
+    private var binding: FragmentAddStudentBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,23 +28,17 @@ class AddStudentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_add_student, container, false)
+        binding = FragmentAddStudentBinding.inflate(inflater, container, false)
 
-        setupView(view)
+        binding?.saveButton?.setOnClickListener(::onSaveClick)
+        binding?.cancelButton?.setOnClickListener(::onCancelClick)
 
-        saveButton?.setOnClickListener(::onSaveClick)
-        cancelButton?.setOnClickListener(::onCancelClick)
-
-        return view
+        return binding?.root
     }
 
-    private fun setupView(view: View?) {
-        saveButton = view?.findViewById(R.id.add_student_activity_save_button)
-        cancelButton = view?.findViewById(R.id.add_student_activity_cancel_button)
-        nameEditText = view?.findViewById(R.id.add_student_activity_name_edit_text)
-        idEditText = view?.findViewById(R.id.add_student_activity_id_edit_text)
-        savedMessageTextView = view?.findViewById(R.id.add_student_activity_save_message_text_view)
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -54,7 +47,18 @@ class AddStudentFragment : Fragment() {
     }
 
     private fun onSaveClick(view: View) {
-        // TODO:
+        val student = Student(
+            id = binding?.idEditText?.text?.toString() ?: "",
+            name = binding?.nameEditText?.text?.toString() ?: "",
+            avatarUrl = "",
+            isChecked = false
+        )
+
+        binding?.progressBar?.visibility = View.VISIBLE
+
+        Model.shared.addStudent(student) {
+            Navigation.findNavController(view).popBackStack()
+        }
     }
 
     private fun onCancelClick(view: View) {
