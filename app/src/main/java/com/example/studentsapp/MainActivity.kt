@@ -1,6 +1,8 @@
 package com.example.studentsapp
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         // TODO: Step 5 - Add Bottom nav bar ✅
 
         val toolBar: Toolbar = findViewById(R.id.toolbar)
+//        toolBar.setBackgroundColor(Color.parseColor("#333333"))
         setSupportActionBar(toolBar)
 
         val navHostController =
@@ -48,7 +53,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_bar)
-        navController?.let { NavigationUI.setupWithNavController( bottomNavigationView, it ) }
+        navController?.let { NavigationUI.setupWithNavController(bottomNavigationView, it) }
+
+//        val db = Firebase.firestore
+//
+//        // Create a new user with a first and last name
+//        val user = hashMapOf(
+//            "first" to "Ada",
+//            "last" to "Lovelace",
+//            "born" to 1815,
+//        )
+//
+//        // Add a new document with a generated ID
+//        db.collection("users").add(user).addOnSuccessListener { documentReference ->
+//                Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
+//            }.addOnFailureListener { e ->
+//                Log.w("TAG", "Error adding document", e)
+//            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

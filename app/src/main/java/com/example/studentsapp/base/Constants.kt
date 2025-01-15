@@ -6,4 +6,8 @@ typealias StudentsCallback = (List<Student>) -> Unit
 typealias EmptyCallback = () -> Unit
 
 object Constants {
+
+    object Collections {
+        const val STUDENTS = "students"
+    }
 }

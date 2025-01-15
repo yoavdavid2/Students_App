@@ -8,6 +8,13 @@ import com.example.studentsapp.model.dao.AppLocalDb
 import com.example.studentsapp.model.dao.AppLocalDbRepository
 import java.util.concurrent.Executors
 
+/*
+1. Create Firebase model ✅
+2. Set and Get ✅
+3. Integrate Firestore ✅
+4. Integrate Student ✅
+ */
+
 class Model private constructor() {
 
     private val database: AppLocalDbRepository = AppLocalDb.database
@@ -21,36 +28,35 @@ class Model private constructor() {
     }
 
     fun getAllStudents(callback: StudentsCallback) {
-        executor.execute {
-            val students = database.studentDao().getAllStudents()
-
-            Thread.sleep(4000)
-
-            mainHandler.post {
-                callback(students)
-            }
-        }
+        firebaseModel.getAllStudents(callback)
+//        executor.execute {
+//            val students = database.studentDao().getAllStudents()
+//            Thread.sleep(4000)
+//            mainHandler.post {
+//                callback(students)
+//            }
+//        }
     }
 
     fun addStudent(student: Student, callback: EmptyCallback) {
-        executor.execute {
-            database.studentDao().insertAll(student)
-
-            Thread.sleep(4000)
-
-            mainHandler.post {
-                callback()
-            }
-        }
+        firebaseModel.addStudent(student, callback)
+//        executor.execute {
+//            database.studentDao().insertAll(student)
+//            Thread.sleep(4000)
+//            mainHandler.post {
+//                callback()
+//            }
+//        }
     }
 
     fun deleteStudent(student: Student, callback: EmptyCallback) {
-        executor.execute {
-            database.studentDao().delete(student)
-            Thread.sleep(4000)
-            mainHandler.post {
-                callback()
-            }
-        }
+        firebaseModel.deleteStudent(student, callback)
+//        executor.execute {
+//            database.studentDao().delete(student)
+//            Thread.sleep(4000)
+//            mainHandler.post {
+//                callback()
+//            }
+//        }
     }
 }
