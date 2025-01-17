@@ -3,6 +3,8 @@ package com.example.studentsapp
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -57,7 +59,11 @@ class StudentsListFragment : Fragment() {
         binding?.recyclerView?.adapter = adapter
 
         val action = StudentsListFragmentDirections.actionGlobalAddStudentFragment()
-        binding?.addStudentButton?.setOnClickListener(Navigation.createNavigateOnClickListener(action))
+        binding?.addStudentButton?.setOnClickListener(
+            Navigation.createNavigateOnClickListener(
+                action
+            )
+        )
 
         return binding?.root
     }

@@ -1,15 +1,15 @@
 package com.example.studentsapp
 
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.studentsapp.databinding.FragmentAddStudentBinding
 import com.example.studentsapp.model.Model
@@ -17,7 +17,10 @@ import com.example.studentsapp.model.Student
 
 class AddStudentFragment : Fragment() {
 
+    private var cameraLauncher: ActivityResultLauncher<Void?>? = null
+
     private var binding: FragmentAddStudentBinding? = null
+    private var didSetProfileImage = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,16 @@ class AddStudentFragment : Fragment() {
 
         binding?.saveButton?.setOnClickListener(::onSaveClick)
         binding?.cancelButton?.setOnClickListener(::onCancelClick)
+
+        cameraLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+                binding?.imageView?.setImageBitmap(bitmap)
+                didSetProfileImage = true
+            }
+
+        binding?.takePictureButton?.setOnClickListener {
+            cameraLauncher?.launch(null)
+        }
 
         return binding?.root
     }
@@ -56,8 +69,20 @@ class AddStudentFragment : Fragment() {
 
         binding?.progressBar?.visibility = View.VISIBLE
 
-        Model.shared.addStudent(student) {
-            Navigation.findNavController(view).popBackStack()
+        if (didSetProfileImage) {
+            binding?.imageView?.isDrawingCacheEnabled = true
+            binding?.imageView?.buildDrawingCache()
+            val bitmap = (binding?.imageView?.drawable as BitmapDrawable).bitmap
+
+            Model.shared.addStudent(student, bitmap, Model.Storage.CLOUDINARY) {
+                binding?.progressBar?.visibility = View.GONE
+                Navigation.findNavController(view).popBackStack()
+            }
+        } else {
+            Model.shared.addStudent(student, null, Model.Storage.CLOUDINARY) {
+                binding?.progressBar?.visibility = View.VISIBLE
+                Navigation.findNavController(view).popBackStack()
+            }
         }
     }
 
