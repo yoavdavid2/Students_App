@@ -1,10 +1,15 @@
 package com.example.studentsapp.model
 
 import android.graphics.Bitmap
+import android.os.Looper
+import androidx.core.os.HandlerCompat
 import com.example.studentsapp.base.EmptyCallback
 import com.example.studentsapp.base.StudentsCallback
 import com.example.studentsapp.base.UploadErrorCallback
 import com.example.studentsapp.base.UploadSuccessCallback
+import com.example.studentsapp.model.dao.AppLocalDb
+import com.example.studentsapp.model.dao.AppLocalDbRepository
+import java.util.concurrent.Executors
 
 /*
 1. Create Firebase model ✅
@@ -14,6 +19,10 @@ import com.example.studentsapp.base.UploadSuccessCallback
  */
 
 class Model private constructor() {
+
+    private val database: AppLocalDbRepository = AppLocalDb.database
+    private val executor = Executors.newSingleThreadExecutor()
+    private val mainHandler = HandlerCompat.createAsync(Looper.getMainLooper())
 
     private val firebaseModel = FirebaseModel()
     private val cloudinaryModel = CloudinaryModel()
@@ -28,7 +37,29 @@ class Model private constructor() {
     }
 
     fun getAllStudents(callback: StudentsCallback) {
-        firebaseModel.getAllStudents(callback)
+        val lastUpdated: Long = Student.lastUpdated
+        firebaseModel.getAllStudents(lastUpdated) { students ->
+            executor.execute {
+                var currentTime = lastUpdated
+
+                for (student in students) {
+                    database.studentDao().insertAll(student)
+                    student.lastUpdated?.let {
+                        if (currentTime < it) {
+                            currentTime = it
+                        }
+                    }
+                }
+
+                Student.lastUpdated = currentTime
+                val savedStudents = database.studentDao().getAllStudents()
+                mainHandler.post {
+                    callback(savedStudents)
+                }
+            }
+        }
+
+
     }
 
     fun addStudent(student: Student, image: Bitmap?, storage: Storage, callback: EmptyCallback) {

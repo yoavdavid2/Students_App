@@ -5,12 +5,15 @@ import com.example.studentsapp.base.Constants
 import com.example.studentsapp.base.EmptyCallback
 import com.example.studentsapp.base.StudentsCallback
 import com.example.studentsapp.base.UploadSuccessCallback
+import com.example.studentsapp.utils.extensions.toFirebaseTimestamp
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.firestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.memoryCacheSettings
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
+import java.util.Date
 
 class FirebaseModel {
 
@@ -29,20 +32,23 @@ class FirebaseModel {
 //        database.firestoreSettings = settings
 //    }
 
-    fun getAllStudents(callback: StudentsCallback) {
-        database.collection(Constants.Collections.STUDENTS).get().addOnCompleteListener {
-            when (it.isSuccessful) {
-                true -> {
-                    val students: MutableList<Student> = mutableListOf()
-                    for (json in it.result) {
-                        students.add(Student.fromJson(json.data))
+    fun getAllStudents(sinceLastUpdated: Long, callback: StudentsCallback) {
+        database.collection(Constants.Collections.STUDENTS)
+            .whereGreaterThanOrEqualTo(Student.LAST_UPDATED_KEY, sinceLastUpdated.toFirebaseTimestamp)
+            .get()
+            .addOnCompleteListener {
+                when (it.isSuccessful) {
+                    true -> {
+                        val students: MutableList<Student> = mutableListOf()
+                        for (json in it.result) {
+                            students.add(Student.fromJson(json.data))
+                        }
+                        callback(students)
                     }
-                    callback(students)
-                }
 
-                false -> callback(listOf())
+                    false -> callback(listOf())
+                }
             }
-        }
     }
 
     fun addStudent(student: Student, callback: EmptyCallback) {
@@ -68,12 +74,10 @@ class FirebaseModel {
         val data = baos.toByteArray()
 
         val uploadTask = imageProfileRef.putBytes(data)
-        uploadTask
-            .addOnFailureListener { callback(null) }
-            .addOnSuccessListener { takeSnapshot ->
-                imageProfileRef.downloadUrl.addOnSuccessListener { uri ->
-                    callback(uri.toString())
-                }
+        uploadTask.addOnFailureListener { callback(null) }.addOnSuccessListener { takeSnapshot ->
+            imageProfileRef.downloadUrl.addOnSuccessListener { uri ->
+                callback(uri.toString())
             }
+        }
     }
 }

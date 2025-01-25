@@ -1,13 +1,13 @@
 package com.example.studentsapp
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studentsapp.adapter.StudentsRecyclerAdapter
@@ -17,10 +17,14 @@ import com.example.studentsapp.model.Student
 
 class StudentsListFragment : Fragment() {
 
-    private var students: List<Student>? = null
     private var adapter: StudentsRecyclerAdapter? = null
-
     private var binding: FragmentStudentsListBinding? = null
+    private var viewModel: StudentsListViewModel? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel = ViewModelProvider(this)[StudentsListViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +44,7 @@ class StudentsListFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         binding?.recyclerView?.layoutManager = layoutManager
 
-        adapter = StudentsRecyclerAdapter(students)
+        adapter = StudentsRecyclerAdapter(viewModel?.students)
         adapter?.listener = object : OnItemClickListener {
             override fun onItemClick(position: Int) {
                 Log.d("Event", "On click Activity listener position $position")
@@ -82,7 +86,7 @@ class StudentsListFragment : Fragment() {
         binding?.progressBar?.visibility = View.VISIBLE
 
         Model.shared.getAllStudents {
-            students = it
+            viewModel?.set(students = it)
             adapter?.update(it)
             adapter?.notifyDataSetChanged()
 
