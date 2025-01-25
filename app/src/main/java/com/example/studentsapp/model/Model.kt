@@ -3,8 +3,8 @@ package com.example.studentsapp.model
 import android.graphics.Bitmap
 import android.os.Looper
 import androidx.core.os.HandlerCompat
+import androidx.lifecycle.LiveData
 import com.example.studentsapp.base.EmptyCallback
-import com.example.studentsapp.base.StudentsCallback
 import com.example.studentsapp.base.UploadErrorCallback
 import com.example.studentsapp.base.UploadSuccessCallback
 import com.example.studentsapp.model.dao.AppLocalDb
@@ -27,16 +27,18 @@ class Model private constructor() {
     private val firebaseModel = FirebaseModel()
     private val cloudinaryModel = CloudinaryModel()
 
+    val students: LiveData<List<Student>>
+        get() = database.studentDao().getAllStudents()
+
     enum class Storage {
-        FIREBASE,
-        CLOUDINARY
+        FIREBASE, CLOUDINARY
     }
 
     companion object {
         val shared = Model()
     }
 
-    fun getAllStudents(callback: StudentsCallback) {
+    fun refreshStudents() {
         val lastUpdated: Long = Student.lastUpdated
         firebaseModel.getAllStudents(lastUpdated) { students ->
             executor.execute {
@@ -52,14 +54,8 @@ class Model private constructor() {
                 }
 
                 Student.lastUpdated = currentTime
-                val savedStudents = database.studentDao().getAllStudents()
-                mainHandler.post {
-                    callback(savedStudents)
-                }
             }
         }
-
-
     }
 
     fun addStudent(student: Student, image: Bitmap?, storage: Storage, callback: EmptyCallback) {
@@ -71,11 +67,12 @@ class Model private constructor() {
                     student = student,
                     callback = { uri ->
                         if (!uri.isNullOrBlank()) {
-                            val student = student.copy(avatarUrl = uri)
-                            firebaseModel.addStudent(student, callback)
+                            val newStudent = student.copy(avatarUrl = uri)
+                            firebaseModel.addStudent(newStudent, callback)
                         } else {
                             callback()
                         }
+                        refreshStudents()
                     },
                 )
             } ?: callback()
@@ -87,10 +84,7 @@ class Model private constructor() {
     }
 
     private fun uploadTo(
-        storage: Storage,
-        image: Bitmap,
-        student: Student,
-        callback: UploadSuccessCallback
+        storage: Storage, image: Bitmap, student: Student, callback: UploadSuccessCallback
     ) {
         when (storage) {
             Storage.FIREBASE -> {
@@ -98,20 +92,16 @@ class Model private constructor() {
             }
 
             Storage.CLOUDINARY -> {
-                uploadImageToCloudinary(
-                    image = image,
+                uploadImageToCloudinary(image = image,
                     name = student.id,
                     onSuccessCallback = callback,
-                    onErrorCallback = { callback(null) }
-                )
+                    onErrorCallback = { callback(null) })
             }
         }
     }
 
     private fun uploadImageToFirebase(
-        image: Bitmap,
-        name: String,
-        callback: UploadSuccessCallback
+        image: Bitmap, name: String, callback: UploadSuccessCallback
     ) {
         firebaseModel.uploadImage(image, name, callback)
     }
@@ -123,10 +113,7 @@ class Model private constructor() {
         onErrorCallback: UploadErrorCallback
     ) {
         cloudinaryModel.uploadImage(
-            bitmap = image,
-            name = name,
-            onSuccess = onSuccessCallback,
-            onError = onErrorCallback
+            bitmap = image, name = name, onSuccess = onSuccessCallback, onError = onErrorCallback
         )
     }
 }

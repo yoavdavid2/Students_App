@@ -1,5 +1,6 @@
 package com.example.studentsapp.model.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -11,7 +12,7 @@ import com.example.studentsapp.model.Student
 interface StudentDao {
 
     @Query("SELECT * FROM Student")
-    fun getAllStudents(): List<Student>
+    fun getAllStudents(): LiveData<List<Student>>
 
     @Query("SELECT * FROM Student WHERE id =:id")
     fun getStudentById(id: String): Student

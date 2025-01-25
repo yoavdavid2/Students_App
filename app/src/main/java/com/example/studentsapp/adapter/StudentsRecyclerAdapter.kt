@@ -7,7 +7,7 @@ import com.example.studentsapp.OnItemClickListener
 import com.example.studentsapp.databinding.StudentListRowBinding
 import com.example.studentsapp.model.Student
 
-class StudentsRecyclerAdapter(private var students: List<Student>?) :
+class StudentsRecyclerAdapter(var students: List<Student>?) :
     RecyclerView.Adapter<StudentViewHolder>() {
     var listener: OnItemClickListener? = null
 
